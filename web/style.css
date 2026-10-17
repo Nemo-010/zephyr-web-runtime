@@ -1,0 +1,165 @@
+:root {
+  color-scheme: dark;
+  --bg: #0a0c0e;
+  --panel: #14181c;
+  --ink: #e8eef4;
+  --muted: #8b98a5;
+  --accent: #6ee7b7;
+  --bezel: #23282e;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: radial-gradient(circle at 30% 0%, #131a20, var(--bg) 60%);
+  color: var(--ink);
+  font: 16px/1.6 ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  min-height: 100vh;
+}
+
+main { max-width: 68rem; margin: 0 auto; padding: 2.5rem 1.5rem 4rem; }
+
+h1 { font-size: 1.7rem; letter-spacing: -0.02em; margin: 0 0 0.4rem; }
+h2 {
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--accent);
+  margin: 1.5rem 0 0.6rem;
+}
+h2:first-child { margin-top: 0; }
+
+.lede { color: var(--muted); max-width: 44rem; margin: 0 0 2rem; }
+
+.stage {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(18rem, 22rem);
+  gap: 2rem;
+  align-items: start;
+}
+@media (max-width: 52rem) {
+  .stage { grid-template-columns: 1fr; }
+}
+
+/* --- the device ------------------------------------------------------- */
+
+.device { display: flex; flex-direction: column; gap: 1.5rem; align-items: center; }
+
+.bezel {
+  position: relative;
+  padding: 1.1rem;
+  background: linear-gradient(160deg, #2b3238, #171b1f);
+  border-radius: 14px;
+  box-shadow:
+    0 1px 0 #3d454c inset,
+    0 -1px 0 #0a0c0e inset,
+    0 24px 48px -12px rgba(0,0,0,0.8);
+  border: 1px solid #0c0f12;
+}
+
+#screen {
+  display: block;
+  width: 512px;
+  height: 256px;
+  /* These are real 1bpp pixels: never smooth them. */
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+  background: #000;
+  border-radius: 3px;
+  box-shadow: 0 0 0 1px #000, 0 0 24px -4px rgba(110, 231, 183, 0.18);
+}
+
+/* A faint sheen, so it reads as a physical OLED rather than a rectangle. */
+.glass {
+  position: absolute;
+  inset: 1.1rem;
+  border-radius: 3px;
+  pointer-events: none;
+  background: linear-gradient(155deg, rgba(255,255,255,0.055) 0%, rgba(255,255,255,0) 42%);
+}
+
+.controls { display: flex; gap: 1rem; }
+
+.key {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.15rem;
+  min-width: 5.5rem;
+  padding: 0.7rem 1.1rem;
+  background: linear-gradient(180deg, #2a3138, #1b2025);
+  color: var(--ink);
+  border: 1px solid #0b0e11;
+  border-radius: 10px;
+  box-shadow: 0 2px 0 #0b0e11, 0 1px 0 #3a434b inset;
+  font: inherit;
+  cursor: pointer;
+  transition: transform 60ms ease, box-shadow 60ms ease;
+  -webkit-user-select: none;
+  user-select: none;
+  touch-action: manipulation;
+}
+
+.key:hover { box-shadow: 0 2px 0 #0b0e11, 0 1px 0 #4a5560 inset; }
+
+.key[data-down="true"] {
+  transform: translateY(2px);
+  box-shadow: 0 0 0 #0b0e11, 0 1px 0 #4a5560 inset;
+  background: linear-gradient(180deg, #232930, #161a1e);
+}
+
+.key-label { font-weight: 600; letter-spacing: 0.02em; }
+.key-code {
+  font-family: ui-monospace, Menlo, Consolas, monospace;
+  font-size: 0.72rem;
+  color: var(--muted);
+}
+
+/* --- the side panel --------------------------------------------------- */
+
+.panel {
+  background: var(--panel);
+  border: 1px solid #212830;
+  border-radius: 12px;
+  padding: 1.25rem;
+  font-size: 0.92rem;
+}
+
+.panel p { color: var(--muted); }
+
+table { width: 100%; border-collapse: collapse; margin: 0.5rem 0; }
+th, td { text-align: left; padding: 0.3rem 0; font-size: 0.86rem; }
+th { color: var(--muted); font-weight: 500; border-bottom: 1px solid #212830; }
+td { color: var(--ink); }
+
+kbd {
+  font-family: ui-monospace, Menlo, Consolas, monospace;
+  font-size: 0.78rem;
+  background: #0a0d10;
+  border: 1px solid #2b333b;
+  border-bottom-width: 2px;
+  border-radius: 4px;
+  padding: 0.05em 0.4em;
+}
+
+dl { display: grid; grid-template-columns: auto 1fr; gap: 0.25rem 1rem; margin: 0.5rem 0; }
+dt { color: var(--muted); font-size: 0.86rem; }
+dd {
+  margin: 0;
+  font-family: ui-monospace, Menlo, Consolas, monospace;
+  font-size: 0.86rem;
+  color: var(--accent);
+}
+
+.notes { padding-left: 1.1rem; color: var(--muted); font-size: 0.84rem; }
+.notes li { margin-bottom: 0.5rem; }
+
+code {
+  font-family: ui-monospace, Menlo, Consolas, monospace;
+  font-size: 0.86em;
+  background: #0a0d10;
+  border: 1px solid #212830;
+  border-radius: 4px;
+  padding: 0.05em 0.3em;
+}

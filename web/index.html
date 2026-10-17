@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Zephyr LVGL runtime - 128x64 OLED</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<main>
+  <header>
+    <h1>128&times;64 monochrome OLED</h1>
+    <p class="lede">
+      LVGL, compiled to WebAssembly, rendering into a 1bpp panel buffer. The
+      image is drawn from the panel's own bytes: eight vertical pixels per byte,
+      bit&nbsp;7 first, exactly as an SSD1306 receives them.
+    </p>
+  </header>
+
+  <div class="stage">
+    <div class="device">
+      <div class="bezel">
+        <canvas id="screen" width="128" height="64"></canvas>
+        <div class="glass" aria-hidden="true"></div>
+      </div>
+
+      <div class="controls">
+        <button class="key" data-code="11" aria-label="Button SW2, key 11">
+          <span class="key-label">SW2</span>
+          <span class="key-code">11</span>
+        </button>
+        <button class="key" data-code="2" aria-label="Button SW3, key 2">
+          <span class="key-label">SW3</span>
+          <span class="key-code">2</span>
+        </button>
+      </div>
+    </div>
+
+    <aside class="panel">
+      <h2>Controls</h2>
+      <p>
+        The two buttons are the <code>gpio-keys</code> this project's board
+        really has, and the numbers are their <code>zephyr,code</code> values
+        read from its devicetree. Press them, or use the keyboard:
+      </p>
+      <table>
+        <tr><th>Key</th><th>Does</th></tr>
+        <tr><td><kbd>0</kbd></td><td>button code 11 (SW2)</td></tr>
+        <tr><td><kbd>1</kbd></td><td>button code 2 (SW3)</td></tr>
+        <tr><td><kbd>Enter</kbd></td><td>button code 28 (SELECT)</td></tr>
+      </table>
+
+      <h2>State</h2>
+      <dl>
+        <dt>Frames</dt><dd id="frames">0</dd>
+        <dt>Render</dt><dd id="rate">-</dd>
+        <dt>Runtime</dt><dd id="status">loading</dd>
+      </dl>
+
+      <h2>Honest notes</h2>
+      <ul class="notes">
+        <li>
+          This is LVGL, not the Zephyr kernel. Zephyr's kernel cannot currently
+          be built for WebAssembly, because its heap-size constants are emitted
+          as absolute symbols, which wasm has no representation for.
+        </li>
+        <li>
+          What is faithful is the part that matters for judging a UI: the same
+          widget tree, the same 1bpp packing, the same bit order, and the same
+          panel geometry.
+        </li>
+      </ul>
+    </aside>
+  </div>
+</main>
+<script src="dist/zephyr-runtime.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

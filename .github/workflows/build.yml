@@ -1,0 +1,65 @@
+name: build
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Install Emscripten
+        uses: mymindstorm/setup-emsdk@v14
+        with:
+          version: 4.0.9
+
+      - name: Fetch LVGL
+        run: |
+          # The runtime is version-agnostic, but pinning keeps CI reproducible.
+          git clone --depth 1 --branch v9.6.0 \
+            https://github.com/lvgl/lvgl.git "$RUNNER_TEMP/lvgl"
+
+      - name: Build
+        env:
+          LVGL_SRC: ${{ runner.temp }}/lvgl
+        run: ./scripts/build-wasm.sh
+
+      - name: Test the runtime headlessly
+        run: node tests/test_runtime.mjs
+
+      - name: Upload the site
+        uses: actions/upload-artifact@v4
+        with:
+          name: site
+          path: web/
+
+  pages:
+    needs: build
+    if: github.event_name != 'pull_request'
+    runs-on: ubuntu-24.04
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: site
+          path: site
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+
+      - id: deploy
+        uses: actions/deploy-pages@v4
