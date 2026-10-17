@@ -42,6 +42,7 @@ jobs:
           path: web/
 
   pages:
+    name: publish
     needs: build
     if: github.event_name != 'pull_request'
     runs-on: ubuntu-24.04
